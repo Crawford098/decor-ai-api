@@ -4,8 +4,14 @@ import cors from 'cors';
 import palettesRoutes from './routes/palettes.routes.js';
 import designsRoutes from './routes/designs.routes.js';
 import { errorHandler, notFound } from './middlewares/errorHandler.js';
+import { testConnection } from './config/prisma.js';
 
 const app: Express = express();
+
+// Test database connection on startup
+testConnection().catch(err => {
+    console.error('Failed to connect to database:', err);
+});
 
 // Middlewares
 app.use(bodyParser.json());

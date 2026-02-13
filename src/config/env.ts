@@ -21,9 +21,9 @@ export const config: Config = {
     openaiApiKey: process.env.OPENAI_API_KEY,
     database: {
         host: process.env.DB_HOST || 'localhost',
-        user: process.env.DB_USER || 'root',
+        user: process.env.DB_USER || 'postgres',
         password: process.env.DB_PASSWORD || '',
         name: process.env.DB_NAME || 'decor_ai',
-        port: Number(process.env.DB_PORT) || 3306,
+        port: Number(process.env.DB_PORT) || 5432,
     },
 };

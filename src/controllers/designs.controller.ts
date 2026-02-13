@@ -1,53 +1,105 @@
 import { Request, Response } from 'express';
+import prisma from '../config/prisma.js';
 
-export const getDesigns = (req: Request, res: Response) => {
-    res.json([
-        {
-            id: '1',
-            name: 'Modern Living Room',
-            style: 'Modern',
-            room: 'Living Room',
-            imageUrl: 'https://example.com/designs/modern-living-room.jpg',
-            createdAt: new Date('2024-01-15'),
-            description: 'Sleek and contemporary living room with minimalist furniture'
-        },
-        {
-            id: '2',
-            name: 'Cozy Bedroom',
-            style: 'Scandinavian',
-            room: 'Bedroom',
-            imageUrl: 'https://example.com/designs/cozy-bedroom.jpg',
-            createdAt: new Date('2024-01-20'),
-            description: 'Warm and inviting bedroom with natural wood accents'
-        },
-        {
-            id: '3',
-            name: 'Industrial Kitchen',
-            style: 'Industrial',
-            room: 'Kitchen',
-            imageUrl: 'https://example.com/designs/industrial-kitchen.jpg',
-            createdAt: new Date('2024-02-01'),
-            description: 'Rustic kitchen with exposed brick and metal fixtures'
-        }
-    ]);
+export const getDesigns = async (req: Request, res: Response) => {
+    try {
+        const designs = await prisma.design.findMany({
+            include: {
+                palette: true
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+        res.json(designs);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch designs' });
+    }
 };
 
-export const getDesignById = (req: Request, res: Response) => {
-    const { id } = req.params;
-    
-    res.json({
-        id: '1',
-        name: 'Modern Living Room',
-        style: 'Modern',
-        room: 'Living Room',
-        imageUrl: 'https://example.com/designs/modern-living-room.jpg',
-        createdAt: new Date('2024-01-15'),
-        description: 'Sleek and contemporary living room with minimalist furniture'
-    });
-}
+export const getDesignById = async (req: Request, res : Response) => {
+    try {
+        const { id } = req.params;
+        const design = await prisma.design.findUnique({
+            where: { id: Number(id) },
+            include: {
+                palette: true
+            }
+        });
 
-// TODO: Add more design controllers
-// - createDesign
-// - updateDesign
-// - deleteDesign
-// - getDesignById
+        if (!design) {
+            return res.status(404).json({ error: 'Design not found' });
+        }
+
+        res.json(design);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch design' });
+    }
+};
+
+export const createDesign = async (req: Request, res: Response) => {
+    try {
+        const { title, description, roomType, style, paletteId, imageUrl, aiPrompt } = req.body;
+        
+        if (!title) {
+            return res.status(400).json({ error: 'Title is required' });
+        }
+
+        const design = await prisma.design.create({
+            data: {
+                title,
+                description,
+                roomType,
+                style,
+                paletteId,
+                imageUrl,
+                aiPrompt
+            },
+            include: {
+                palette: true
+            }
+        });
+
+        res.status(201).json(design);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create design' });
+    }
+};
+
+export const updateDesign = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { title, description, roomType, style, paletteId, imageUrl, aiPrompt } = req.body;
+
+        const design = await prisma.design.update({
+            where: { id: Number(id) },
+            data: {
+                title,
+                description,
+                roomType,
+                style,
+                paletteId,
+                imageUrl,
+                aiPrompt
+            },
+            include: {
+                palette: true
+            }
+        });
+
+        res.json(design);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update design' });
+    }
+};
+
+export const deleteDesign = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        await prisma.design.delete({
+            where: { id: Number(id) }
+        });
+
+        res.json({ message: 'Design deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete design' });
+    }
+};
