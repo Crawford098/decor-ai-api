@@ -1,16 +1,15 @@
 import { Request, Response } from 'express';
 import prisma from '../config/prisma.js';
 
-export const getDesigns = async (req: Request, res: Response) => {
+export const getDesigns = async (_req: Request, res: Response) => {
     try {
         const designs = await prisma.design.findMany({
             include: {
-                palette: true
-            },
-            orderBy: { createdAt: 'desc' }
+                user: true
+            }
         });
         res.json(designs);
-    } catch (error) {
+    } catch (error: unknown) {
         res.status(500).json({ error: 'Failed to fetch designs' });
     }
 };
@@ -19,9 +18,9 @@ export const getDesignById = async (req: Request, res : Response) => {
     try {
         const { id } = req.params;
         const design = await prisma.design.findUnique({
-            where: { id: Number(id) },
+            where: { designId: Number(id) },
             include: {
-                palette: true
+                user: true
             }
         });
 
@@ -29,65 +28,69 @@ export const getDesignById = async (req: Request, res : Response) => {
             return res.status(404).json({ error: 'Design not found' });
         }
 
-        res.json(design);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch design' });
+        return res.json(design);
+    } catch (error: unknown) {
+        return res.status(500).json({ error: 'Failed to fetch design' });
     }
 };
 
 export const createDesign = async (req: Request, res: Response) => {
     try {
-        const { title, description, roomType, style, paletteId, imageUrl, aiPrompt } = req.body;
+        const { userId, name, pronts, img } = req.body;
         
-        if (!title) {
-            return res.status(400).json({ error: 'Title is required' });
+        if (!userId) {
+            return res.status(400).json({ error: 'userId is required' });
+        }
+
+        // Verificar que el usuario existe
+        const userExists = await prisma.user.findUnique({
+            where: { userId: Number(userId) }
+        });
+
+        if (!userExists) {
+            return res.status(404).json({ error: `User with id ${userId} not found` });
         }
 
         const design = await prisma.design.create({
             data: {
-                title,
-                description,
-                roomType,
-                style,
-                paletteId,
-                imageUrl,
-                aiPrompt
+                userId: Number(userId),
+                name,
+                pronts,
+                img
             },
             include: {
-                palette: true
+                user: true
             }
         });
 
-        res.status(201).json(design);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to create design' });
+        return res.status(201).json(design);
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        return res.status(500).json({ error: 'Failed to create design: ' + message });
     }
 };
 
 export const updateDesign = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { title, description, roomType, style, paletteId, imageUrl, aiPrompt } = req.body;
+        const { name, pronts, img } = req.body;
 
         const design = await prisma.design.update({
-            where: { id: Number(id) },
+            where: { designId: Number(id) },
             data: {
-                title,
-                description,
-                roomType,
-                style,
-                paletteId,
-                imageUrl,
-                aiPrompt
+                name,
+                pronts,
+                img
             },
             include: {
-                palette: true
+                user: true
             }
         });
 
-        res.json(design);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to update design' });
+        return res.json(design);
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        return res.status(500).json({ error: 'Failed to update design: ' + message });
     }
 };
 
@@ -95,11 +98,12 @@ export const deleteDesign = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         await prisma.design.delete({
-            where: { id: Number(id) }
+            where: { designId: Number(id) }
         });
 
-        res.json({ message: 'Design deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to delete design' });
+        return res.json({ message: 'Design deleted successfully' });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        return res.status(500).json({ error: 'Failed to delete design: ' + message });
     }
 };

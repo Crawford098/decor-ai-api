@@ -7,35 +7,80 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
-model Palette {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(255)
-  colors    Json
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  designs   Design[]
+model Profile {
+  profileId  Int     @id @default(autoincrement()) @map("profileId")
+  first_name String  @default("default") @db.VarChar(255)
+  last_name  String  @default("default") @db.VarChar(255)
+  hidden     Int     @default(0) @db.SmallInt
+  users      User[]
 
-  @@map("palettes")
+  @@map("profile")
+}
+
+model User {
+  userId     Int        @id @default(autoincrement()) @map("userId")
+  profileId  Int        @map("profileId")
+  username   String     @default("default") @db.VarChar(255)
+  password   String     @default("default") @db.VarChar(255)
+  email      String     @default("default") @db.VarChar(255)
+  blocked    Int        @default(0) @db.SmallInt
+  token      String?    @default("default") @db.Text
+  hidden     Int        @default(0) @db.SmallInt
+  created_at DateTime?  @db.Timestamp(6)
+  profile    Profile    @relation(fields: [profileId], references: [profileId])
+  designs    Design[]
+  works_done WorksDone[]
+
+  @@map("users")
+}
+
+model ColorPalette {
+  paletteId  Int         @id @default(autoincrement()) @map("paletteId")
+  name       String      @default("default") @db.VarChar(255)
+  colors     String      @default("default") @db.Text
+  hidden     Int         @default(0) @db.SmallInt
+  works_done WorksDone[]
+
+  @@map("color_palettes")
 }
 
 model Design {
-  id          Int       @id @default(autoincrement())
-  title       String    @db.VarChar(255)
-  description String?   @db.Text
-  roomType    String?   @map("room_type") @db.VarChar(100)
-  style       String?   @db.VarChar(100)
-  paletteId   Int?      @map("palette_id")
-  palette     Palette?  @relation(fields: [paletteId], references: [id])
-  imageUrl    String?   @map("image_url") @db.Text
-  aiPrompt    String?   @map("ai_prompt") @db.Text
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  designId   Int         @id @default(autoincrement()) @map("designId")
+  userId     Int         @map("userId")
+  name       String?     @db.VarChar(255)
+  pronts     String?     @db.Text
+  img        String?     @db.VarChar(255)
+  hidden     Int         @default(0) @db.SmallInt
+  user       User        @relation(fields: [userId], references: [userId])
+  works_done WorksDone[]
 
-  @@index([paletteId])
-  @@index([roomType])
-  @@index([style])
   @@map("designs")
+}
+
+model Image {
+  imageId Int      @id @default(autoincrement()) @map("imageId")
+  worldId Int      @map("worldId")
+  path    String   @default("default") @db.VarChar(255)
+  date    DateTime @db.Date
+  hidden  Int      @default(0) @db.SmallInt
+  work    WorksDone @relation(fields: [worldId], references: [worldId])
+
+  @@map("images")
+}
+
+model WorksDone {
+  worldId     Int          @id @default(autoincrement()) @map("worldId")
+  designId    Int          @default(0) @map("designId")
+  paletteId   Int          @default(0) @map("paletteId")
+  userId      Int          @default(0) @map("userId")
+  final_pront String?      @default("default") @db.Text
+  hidden      Int          @default(0) @db.SmallInt
+  design      Design       @relation(fields: [designId], references: [designId])
+  palette     ColorPalette @relation(fields: [paletteId], references: [paletteId])
+  user        User         @relation(fields: [userId], references: [userId])
+  images      Image[]
+
+  @@map("works_done")
 }
