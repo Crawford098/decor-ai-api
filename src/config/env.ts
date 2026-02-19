@@ -6,6 +6,10 @@ interface Config {
     port: number;
     nodeEnv: string;
     openaiApiKey: string | undefined;
+    stripe: {
+        secretKey: string | undefined;
+        webhookSecret: string | undefined;
+    };
     database: {
         host: string;
         user: string;
@@ -19,6 +23,10 @@ export const config: Config = {
     port: Number(process.env.PORT) || 3000,
     nodeEnv: process.env.NODE_ENV || 'development',
     openaiApiKey: process.env.OPENAI_API_KEY,
+    stripe: {
+        secretKey: process.env.STRIPE_SECRET_KEY,
+        webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+    },
     database: {
         host: process.env.DB_HOST || 'localhost',
         user: process.env.DB_USER || 'postgres',
