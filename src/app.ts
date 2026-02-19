@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import palettesRoutes from './routes/palettes.routes.js';
 import designsRoutes from './routes/designs.routes.js';
+import usersRoutes from './routes/users.routes.js';
 import { errorHandler, notFound } from './middlewares/errorHandler.js';
 import { testConnection } from './config/prisma.js';
 
@@ -20,6 +21,7 @@ app.use(cors());
 // Routes
 app.use('/api/palettes', palettesRoutes);
 app.use('/api/designs', designsRoutes);
+app.use('/api/users', usersRoutes);
 
 // Error Handlers
 app.use(notFound);

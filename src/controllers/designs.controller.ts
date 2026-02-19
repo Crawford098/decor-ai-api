@@ -1,13 +1,9 @@
 import { Request, Response } from 'express';
-import prisma from '../config/prisma.js';
+import * as designService from '../services/designs/design.service.js';
 
 export const getDesigns = async (_req: Request, res: Response) => {
     try {
-        const designs = await prisma.design.findMany({
-            include: {
-                user: true
-            }
-        });
+        const designs = await designService.findAllDesigns();
         res.json(designs);
     } catch (error: unknown) {
         res.status(500).json({ error: 'Failed to fetch designs' });
@@ -17,12 +13,7 @@ export const getDesigns = async (_req: Request, res: Response) => {
 export const getDesignById = async (req: Request, res : Response) => {
     try {
         const { id } = req.params;
-        const design = await prisma.design.findUnique({
-            where: { designId: Number(id) },
-            include: {
-                user: true
-            }
-        });
+        const design = await designService.findDesignById(Number(id));
 
         if (!design) {
             return res.status(404).json({ error: 'Design not found' });
@@ -43,24 +34,17 @@ export const createDesign = async (req: Request, res: Response) => {
         }
 
         // Verificar que el usuario existe
-        const userExists = await prisma.user.findUnique({
-            where: { userId: Number(userId) }
-        });
+        const exists = await designService.userExists(Number(userId));
 
-        if (!userExists) {
+        if (!exists) {
             return res.status(404).json({ error: `User with id ${userId} not found` });
         }
 
-        const design = await prisma.design.create({
-            data: {
-                userId: Number(userId),
-                name,
-                pronts,
-                img
-            },
-            include: {
-                user: true
-            }
+        const design = await designService.createDesign({
+            userId: Number(userId),
+            name,
+            pronts,
+            img
         });
 
         return res.status(201).json(design);
@@ -75,16 +59,10 @@ export const updateDesign = async (req: Request, res: Response) => {
         const { id } = req.params;
         const { name, pronts, img } = req.body;
 
-        const design = await prisma.design.update({
-            where: { designId: Number(id) },
-            data: {
-                name,
-                pronts,
-                img
-            },
-            include: {
-                user: true
-            }
+        const design = await designService.updateDesign(Number(id), {
+            name,
+            pronts,
+            img
         });
 
         return res.json(design);
@@ -97,9 +75,7 @@ export const updateDesign = async (req: Request, res: Response) => {
 export const deleteDesign = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        await prisma.design.delete({
-            where: { designId: Number(id) }
-        });
+        await designService.deleteDesign(Number(id));
 
         return res.json({ message: 'Design deleted successfully' });
     } catch (error: unknown) {
