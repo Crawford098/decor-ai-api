@@ -1,28 +1,14 @@
 import { Request, Response } from 'express';
 import prisma from '../config/prisma.js';
 
-export const getPalettes = async (req: Request, res: Response) => {
+export const getPalettes = async (req: Request, res: Response)=> {
     try {
-        const palettes = await prisma.palette.findMany({
-            orderBy: { createdAt: 'desc' }
+        const palettes = await prisma.colorPalette.findMany({
+            orderBy: { paletteId: 'desc' }
         });
-        res.json(palettes);
+        return res.json(palettes);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch palettes' });
-    }
-};
-
-export const getPalettesWithColors = async (req: Request, res: Response) => {
-    try {
-        const palettes = await prisma.palette.findMany({
-            include: {
-                designs: true
-            },
-            orderBy: { createdAt: 'desc' }
-        });
-        res.json(palettes);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch palettes with colors' });
+        return res.status(500).json({ error: 'Failed to fetch palettes' });
     }
 };
 
@@ -34,18 +20,18 @@ export const savePalette = async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'Name and colors are required' });
         }
 
-        const palette = await prisma.palette.create({
+        const palette = await prisma.colorPalette.create({
             data: {
                 name,
                 colors
             }
         });
 
-        res.status(201).json({ 
+        return res.status(201).json({ 
             message: 'Palette saved successfully!',
             palette 
         });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to save palette' });
+        return res.status(500).json({ error: 'Failed to save palette' });
     }
 };
