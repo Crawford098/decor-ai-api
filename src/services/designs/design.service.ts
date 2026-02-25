@@ -45,7 +45,8 @@ export const createDesign = async (data: CreateDesignData) => {
       userId: data.userId,
       name: data.name,
       pronts: data.pronts,
-      img: data.img
+      img: data.img,
+      hidden: 0
     },
     include: {
       user: true

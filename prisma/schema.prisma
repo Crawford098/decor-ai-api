@@ -41,10 +41,34 @@ model ColorPalette {
   paletteId  Int         @id @default(autoincrement()) @map("paletteId")
   name       String      @default("default") @db.VarChar(255)
   colors     String      @default("default") @db.Text
+  createdDate DateTime   @map("created_date")  @default(now()) @db.Timestamp(6)
   hidden     Int         @default(0) @db.SmallInt
   works_done WorksDone[]
+  paletteTags PaletteTags[]
 
   @@map("color_palettes")
+}
+
+model Tags {
+  tagId       Int         @id @default(autoincrement()) @map("tagId")
+  name        String      @default("default") @db.VarChar(255)
+  createdDate DateTime    @map("created_date")  @default(now()) @db.Timestamp(6)
+  hidden      Int         @default(0) @db.SmallInt
+  paletteTags PaletteTags[]
+
+  @@map("tags")
+}
+
+model PaletteTags {
+  paletteTagId  Int       @id @default(autoincrement()) @map("paletteTagId")
+  tagId         Int       @map("tagId")
+  colorPaletteId Int      @map("paletteId")
+  createdDate   DateTime  @map("created_date")  @default(now()) @db.Timestamp(6)
+  hidden        Int       @default(0) @db.SmallInt
+  tag           Tags      @relation(fields: [tagId], references: [tagId])
+  colorPalette  ColorPalette @relation(fields: [colorPaletteId], references: [paletteId])
+
+  @@map("palette_tags")
 }
 
 model Design {

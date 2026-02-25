@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as paletteService from '../services/palettes/palette.service.js';
 
-export const getPalettes = async (req: Request, res: Response)=> {
+export const getPalettes = async (_req: Request, res: Response)=> {
     try {
         const palettes = await paletteService.findAllPalettes();
         return res.json(palettes);
