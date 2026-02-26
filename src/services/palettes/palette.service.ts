@@ -9,8 +9,11 @@ export interface CreatePaletteData {
  * Get all color palettes ordered by most recent
  */
 export const findAllPalettes = async () => {
-  return prisma.colorPalette.findMany({
-    orderBy: { paletteId: 'desc' }
+  return prisma.palettes.findMany({
+    orderBy: { paletteId: 'desc' },
+    include: {
+      paletteTags: true
+    }
   });
 };
 
@@ -18,7 +21,7 @@ export const findAllPalettes = async () => {
  * Create a new color palette
  */
 export const createPalette = async (data: CreatePaletteData) => {
-  return prisma.colorPalette.create({
+  return prisma.palettes.create({
     data: {
       name: data.name,
       colors: data.colors

@@ -37,21 +37,21 @@ model User {
   @@map("users")
 }
 
-model ColorPalette {
+model Palettes {
   paletteId  Int         @id @default(autoincrement()) @map("paletteId")
-  name       String      @default("default") @db.VarChar(255)
+  name       String      @default("default") @db.VarChar(255) // default is nor default must be null
   colors     String      @default("default") @db.Text
   createdDate DateTime   @map("created_date")  @default(now()) @db.Timestamp(6)
   hidden     Int         @default(0) @db.SmallInt
   works_done WorksDone[]
   paletteTags PaletteTags[]
 
-  @@map("color_palettes")
+  @@map("palettes")
 }
 
 model Tags {
   tagId       Int         @id @default(autoincrement()) @map("tagId")
-  name        String      @default("default") @db.VarChar(255)
+  name        String      @default("default") @db.VarChar(255) // default is nor default must be null
   createdDate DateTime    @map("created_date")  @default(now()) @db.Timestamp(6)
   hidden      Int         @default(0) @db.SmallInt
   paletteTags PaletteTags[]
@@ -62,12 +62,13 @@ model Tags {
 model PaletteTags {
   paletteTagId  Int       @id @default(autoincrement()) @map("paletteTagId")
   tagId         Int       @map("tagId")
-  colorPaletteId Int      @map("paletteId")
+  paletteId     Int       @map("paletteId")
   createdDate   DateTime  @map("created_date")  @default(now()) @db.Timestamp(6)
   hidden        Int       @default(0) @db.SmallInt
   tag           Tags      @relation(fields: [tagId], references: [tagId])
-  colorPalette  ColorPalette @relation(fields: [colorPaletteId], references: [paletteId])
+  palette       Palettes  @relation(fields: [paletteId], references: [paletteId])
 
+  @@unique([tagId, paletteId])
   @@map("palette_tags")
 }
 
@@ -103,7 +104,7 @@ model WorksDone {
   final_pront String?      @default("default") @db.Text
   hidden      Int          @default(0) @db.SmallInt
   design      Design       @relation(fields: [designId], references: [designId])
-  palette     ColorPalette @relation(fields: [paletteId], references: [paletteId])
+  palette     Palettes     @relation(fields: [paletteId], references: [paletteId])
   user        User         @relation(fields: [userId], references: [userId])
   images      Image[]
 

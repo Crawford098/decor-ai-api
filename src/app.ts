@@ -4,6 +4,7 @@ import cors from 'cors';
 import palettesRoutes from './routes/palettes.routes.js';
 import designsRoutes from './routes/designs.routes.js';
 import usersRoutes from './routes/users.routes.js';
+import tagsRoutes from './routes/tags.routes.js';
 import { errorHandler, notFound } from './middlewares/errorHandler.js';
 import { testConnection } from './config/prisma.js';
 
@@ -25,6 +26,7 @@ app.use(cors({'origin': '*'}));
 app.use('/api/palettes', palettesRoutes);
 app.use('/api/designs', designsRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api/tags', tagsRoutes);
 // app.use('/api/payments', paymentsRoutes);
 
 // Error Handlers
