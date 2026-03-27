@@ -33,17 +33,22 @@ model User {
   profile    Profile    @relation(fields: [profileId], references: [profileId])
   designs    Design[]
   works_done WorksDone[]
+  palettes   Palettes[]
+  tags       Tags[]
 
   @@map("users")
 }
 
 model Palettes {
-  paletteId  Int         @id @default(autoincrement()) @map("paletteId")
-  name       String      @default("default") @db.VarChar(255) // default is nor default must be null
-  colors     String      @default("default") @db.Text
-  createdDate DateTime   @map("created_date")  @default(now()) @db.Timestamp(6)
-  hidden     Int         @default(0) @db.SmallInt
-  works_done WorksDone[]
+  paletteId   Int         @id @default(autoincrement()) @map("paletteId")
+  userId      Int?        @map("userId")
+  name        String      @db.VarChar(255) // default is nor default must be null
+  colors      String      @db.Text
+  created_by  String      @default("SYSTEM") @db.VarChar(50) 
+  createdDate DateTime    @map("created_date")  @default(now()) @db.Timestamp(6)
+  hidden      Int         @default(0) @db.SmallInt
+  user        User?       @relation(fields: [userId], references: [userId])
+  works_done  WorksDone[]
   paletteTags PaletteTags[]
 
   @@map("palettes")
@@ -51,9 +56,12 @@ model Palettes {
 
 model Tags {
   tagId       Int         @id @default(autoincrement()) @map("tagId")
+  userId      Int?        @map("userId")
   name        String      @default("default") @db.VarChar(255) // default is nor default must be null
+  created_by  String      @default("SYSTEM") @db.VarChar(50) // Two options: SYSTEM or USER
   createdDate DateTime    @map("created_date")  @default(now()) @db.Timestamp(6)
   hidden      Int         @default(0) @db.SmallInt
+  user        User?       @relation(fields: [userId], references: [userId])
   paletteTags PaletteTags[]
 
   @@map("tags")

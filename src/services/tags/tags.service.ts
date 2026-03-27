@@ -15,3 +15,13 @@ export const findPaletteTags = async () => {
     }
   });
 };
+
+export const createTag = async (data: { userId: number; name: string }) => {
+  return prisma.tags.create({
+    data: {
+      userId: data.userId,
+      name: data.name,
+      created_by: 'USER'
+    }
+  });
+};

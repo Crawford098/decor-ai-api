@@ -1,9 +1,10 @@
 import express from 'express';
-import { getPalettes, savePalette } from '../controllers/palettes.controller.js';
+import { getPalettes, savePalette, deletePalette } from '../controllers/palettes.controller.js';
 
 const router = express.Router();
 
 router.get('/', getPalettes);
-router.post('/save', savePalette);
+router.post('/', savePalette);
+router.post('/delete/:id', deletePalette);
 
 export default router;

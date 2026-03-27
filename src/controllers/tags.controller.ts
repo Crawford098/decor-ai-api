@@ -9,3 +9,17 @@ export const paletteTagsList = async (_req: Request, res: Response) => {
         res.status(500).json({ error: 'Failed to fetch designs' });
     }
 };
+
+export const createTag = async (req: Request, res: Response) => {
+    try {
+        const { userId, name } = req.body;
+
+        const newTag = await tagsService.createTag({ userId: Number(userId), name });
+
+        res.status(201).json(newTag);
+    } catch (error) {
+        res.status(500).json({
+            error: 'Failed to create tag: ' + (error instanceof Error ? error.message : 'Unknown error')
+        });
+    }
+}

@@ -12,13 +12,13 @@ export const getPalettes = async (_req: Request, res: Response)=> {
 
 export const savePalette = async (req: Request, res: Response) => {
     try {
-        const { name, colors } = req.body;
+        const { userId, name, colors } = req.body;
         
-        if (!name || !colors) {
-            return res.status(400).json({ error: 'Name and colors are required' });
+        if (!userId || !name || !colors) {
+            return res.status(400).json({ error: 'User ID, name, and colors are required' });
         }
 
-        const palette = await paletteService.createPalette({ name, colors });
+        const palette = await paletteService.createPalette({ userId, name, colors });
 
         return res.status(201).json({ 
             message: 'Palette saved successfully!',
@@ -26,5 +26,21 @@ export const savePalette = async (req: Request, res: Response) => {
         });
     } catch (error) {
         return res.status(500).json({ error: 'Failed to save palette' });
+    }
+};
+
+export const deletePalette = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ error: 'Palette ID is required' });
+        }
+
+        await paletteService.deletePalette(Number(id));
+
+        return res.status(200).json({ message: 'Palette deleted successfully!' });
+    } catch (error) {
+        return res.status(500).json({ error: 'Failed to delete palette' });
     }
 };
