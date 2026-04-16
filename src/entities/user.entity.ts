@@ -29,6 +29,9 @@ export class User {
   @Column({ type: 'varchar', length: 255, default: 'default' })
   email: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true, unique: true })
+  googleId: string;
+
   @Column({ type: 'smallint', default: 0 })
   blocked: number;
 

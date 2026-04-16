@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Param, Put, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { DesignsService } from './designs.service';
 import { CreateDesignDto, UpdateDesignDto } from './dto/design.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('designs')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('designs')
 export class DesignsController {
   constructor(private readonly designsService: DesignsService) {}

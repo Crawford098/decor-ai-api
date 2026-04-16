@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Param, Put, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { PalettesService } from './palettes.service';
 import { CreatePaletteDto, UpdatePaletteDto } from './dto/palette.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('palettes')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('palettes')
 export class PalettesController {
   constructor(private readonly palettesService: PalettesService) {}

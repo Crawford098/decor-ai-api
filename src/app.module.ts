@@ -7,6 +7,7 @@ import { DesignsModule } from './modules/designs/designs.module';
 import { TagsModule } from './modules/tags/tags.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { OpenAiModule } from './modules/openai/openai.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { Profile } from './entities/profile.entity';
 import { User } from './entities/user.entity';
 import { Palette } from './entities/palette.entity';
@@ -39,6 +40,7 @@ import { Image } from './entities/image.entity';
     TagsModule,
     PaymentsModule,
     OpenAiModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

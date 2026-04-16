@@ -1,0 +1,2 @@
+--Todo: if bd does not have googleId column, run the following SQL command to add it:
+ALTER TABLE users ADD COLUMN "googleId" VARCHAR(255) UNIQUE;

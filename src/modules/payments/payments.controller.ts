@@ -1,9 +1,13 @@
-import { Controller, Post, Body, Headers, RawBodyRequest, Req } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Post, Body, Headers, RawBodyRequest, Req, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { PaymentsService } from './payments.service';
 import { Request } from 'express';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('payments')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
@@ -26,6 +30,7 @@ export class PaymentsController {
     return this.paymentsService.createCustomer(body.email, body.name);
   }
 
+  @Public()
   @Post('webhook')
   @ApiOperation({ summary: 'Stripe webhook endpoint' })
   async handleWebhook(
