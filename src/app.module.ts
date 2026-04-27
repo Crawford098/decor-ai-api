@@ -8,6 +8,8 @@ import { TagsModule } from './modules/tags/tags.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { OpenAiModule } from './modules/openai/openai.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { WorkdoneModule } from './modules/workdone/workdone.module';
+import { S3Module } from './modules/s3/s3.module';
 import { Profile } from './entities/profile.entity';
 import { User } from './entities/user.entity';
 import { Palette } from './entities/palette.entity';
@@ -41,6 +43,8 @@ import { Image } from './entities/image.entity';
     PaymentsModule,
     OpenAiModule,
     AuthModule,
+    WorkdoneModule,
+    S3Module,
   ],
 })
 export class AppModule {}
