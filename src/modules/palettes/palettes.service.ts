@@ -33,7 +33,7 @@ export class PalettesService {
   async create(createPaletteDto: CreatePaletteDto): Promise<Palette> {
     const palette = this.palettesRepository.create({
       ...createPaletteDto,
-      created_by: (createPaletteDto.created_by)?.toUpperCase() || 'SYSTEM',
+      created_by: createPaletteDto.userId ? 'USER' : 'SYSTEM',
       createdDate: new Date(),
     });
     return this.palettesRepository.save(palette);

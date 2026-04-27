@@ -15,10 +15,6 @@ export class CreatePaletteDto {
   @IsString()
   colors: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  created_by?: string;
 }
 
 export class UpdatePaletteDto {
