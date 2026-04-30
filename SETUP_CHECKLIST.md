@@ -111,7 +111,7 @@ Al terminar, rellena en `.env`:
 AWS_REGION=us-east-1
 AWS_ACCESS_KEY_ID=AKIA...
 AWS_SECRET_ACCESS_KEY=...
-AWS_S3_BUCKET_WORKDONE=decor-ai-workdone
+AWS_S3_BUCKET_DECORAI=decorAI
 ```
 
 ---
@@ -140,7 +140,7 @@ JWT_REFRESH_EXPIRATION=604800
 AWS_REGION=us-east-1
 AWS_ACCESS_KEY_ID=...
 AWS_SECRET_ACCESS_KEY=...
-AWS_S3_BUCKET_WORKDONE=decor-ai-workdone
+AWS_S3_BUCKET_DECORAI=decorai
 ```
 
 ---
@@ -226,5 +226,5 @@ Content-Type: application/json
 | `OpenAI 429 Too Many Requests` | Sin créditos en OpenAI | Agregar saldo en platform.openai.com/account/billing |
 | `OpenAI billing_hard_limit_reached` | Límite de gasto alcanzado | Subir el límite en platform.openai.com |
 | `S3 upload failed: AccessDenied` | Usuario IAM sin permiso `s3:PutObject` | Revisar política IAM en S3_SETUP.md Paso 4 |
-| `S3 upload failed: NoSuchBucket` | Bucket no existe o nombre incorrecto | Verificar `AWS_S3_BUCKET_WORKDONE` en `.env` |
+| `S3 upload failed: NoSuchBucket` | Bucket no existe o nombre incorrecto | Verificar `AWS_S3_BUCKET_DECORAI` en `.env` |
 | `ConfigService: AWS_REGION is required` | Variable de entorno faltante | Agregar la variable al `.env` |

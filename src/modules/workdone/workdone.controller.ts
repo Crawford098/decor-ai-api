@@ -10,6 +10,8 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { WorkdoneService } from './workdone.service';
 import { GenerateWorkDoneDto } from './dto/workdone.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { AuthenticatedUser } from '../auth/interfaces/authenticated-user.interface';
 
 @ApiTags('workdone')
 @ApiBearerAuth()
@@ -33,7 +35,7 @@ export class WorkdoneController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Design or Palette not found' })
   @ApiResponse({ status: 500, description: 'OpenAI, S3, or database error' })
-  async generate(@Body() dto: GenerateWorkDoneDto) {
-    return this.workdoneService.generate(dto);
+  async generate(@CurrentUser() user: AuthenticatedUser, @Body() dto: GenerateWorkDoneDto) {
+    return this.workdoneService.generate(user, dto);
   }
 }

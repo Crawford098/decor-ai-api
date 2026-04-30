@@ -2,10 +2,6 @@ import { IsNumber, IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GenerateWorkDoneDto {
-  @ApiProperty({ description: 'ID of the user requesting the generation', example: 1 })
-  @IsNumber()
-  userId: number;
-
   @ApiProperty({ description: 'ID of the design whose prompt will be used', example: 1 })
   @IsNumber()
   designId: number;

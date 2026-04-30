@@ -126,7 +126,7 @@ Add the following variables to your `.env`:
 AWS_REGION=us-east-1                          # Region where the bucket was created
 AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE        # From Step 5
 AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY  # From Step 5
-AWS_S3_BUCKET_WORKDONE=decor-ai-workdone      # Your bucket name from Step 1
+AWS_S3_BUCKET_DECORAI=decorAI     # Your bucket name from Step 1
 ```
 
 ---
@@ -136,12 +136,12 @@ AWS_S3_BUCKET_WORKDONE=decor-ai-workdone      # Your bucket name from Step 1
 Images will be publicly accessible at:
 
 ```
-https://<AWS_S3_BUCKET_WORKDONE>.s3.<AWS_REGION>.amazonaws.com/workdone/<userId>/<uuid>.png
+https://<AWS_S3_BUCKET_DECORAI>.s3.<AWS_REGION>.amazonaws.com/workdone/<userId>/<uuid>.png
 ```
 
 Example:
 ```
-https://decor-ai-workdone.s3.us-east-1.amazonaws.com/workdone/42/f3b2c1d4-0e5f-4a6b-8c7d-9e0f1a2b3c4d.png
+https://decorai.s3.us-east-1.amazonaws.com/workdone/42/f3b2c1d4-0e5f-4a6b-8c7d-9e0f1a2b3c4d.png
 ```
 
 ---
