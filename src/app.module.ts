@@ -10,6 +10,7 @@ import { OpenAiModule } from './modules/openai/openai.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { WorkdoneModule } from './modules/workdone/workdone.module';
 import { S3Module } from './modules/s3/s3.module';
+import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
 import { Profile } from './entities/profile.entity';
 import { User } from './entities/user.entity';
 import { Palette } from './entities/palette.entity';
@@ -18,6 +19,8 @@ import { PaletteTag } from './entities/palette-tag.entity';
 import { Design } from './entities/design.entity';
 import { WorksDone } from './entities/works-done.entity';
 import { Image } from './entities/image.entity';
+import { Subscription } from './entities/subscription.entity';
+import { SubscriptionEvent } from './entities/subscription-event.entity';
 
 @Module({
   imports: [
@@ -32,7 +35,7 @@ import { Image } from './entities/image.entity';
       username: process.env.DB_USER || 'postgres',
       password: process.env.DB_PASSWORD || '',
       database: process.env.DB_NAME || 'decor_ai',
-      entities: [Profile, User, Palette, Tag, PaletteTag, Design, WorksDone, Image],
+      entities: [Profile, User, Palette, Tag, PaletteTag, Design, WorksDone, Image, Subscription, SubscriptionEvent],
       synchronize: false,
       logging: process.env.NODE_ENV === 'development',
     }),
@@ -45,6 +48,7 @@ import { Image } from './entities/image.entity';
     AuthModule,
     WorkdoneModule,
     S3Module,
+    SubscriptionsModule,
   ],
 })
 export class AppModule {}

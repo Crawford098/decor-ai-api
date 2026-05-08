@@ -11,6 +11,7 @@ import { Design } from './design.entity';
 import { WorksDone } from './works-done.entity';
 import { Palette } from './palette.entity';
 import { Tag } from './tag.entity';
+import { Subscription } from './subscription.entity';
 
 @Entity('users')
 export class User {
@@ -59,4 +60,7 @@ export class User {
 
   @OneToMany(() => Tag, (tag) => tag.user)
   tags: Tag[];
+
+  @OneToMany(() => Subscription, (subscription) => subscription.user)
+  subscriptions: Subscription[];
 }
